@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Gauntlet Core
+Comment=Gauntlet P2P Cryptocurrency
+Comment[fr]=Gauntlet, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Gauntlet, eşten eşe kriptografik sanal para birimi
+Exec=gauntlet-qt %u
+Terminal=false
+Type=Application
+Icon=gauntlet128
+MimeType=x-scheme-handler/gauntlet;
+Categories=Office;Finance;
+StartupWMClass=Gauntlet-qt

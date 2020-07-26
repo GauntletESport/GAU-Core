@@ -1,0 +1,6 @@
+usr/local/bin/gauntlet-qt usr/bin
+share/pixmaps/gauntlet32.xpm usr/share/pixmaps
+share/pixmaps/gauntlet16.xpm usr/share/pixmaps
+share/pixmaps/gauntlet128.png usr/share/pixmaps
+debian/gauntlet-qt.desktop usr/share/applications
+debian/gauntlet-qt.protocol usr/share/kde4/services/

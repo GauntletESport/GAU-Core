@@ -1,0 +1,81 @@
+policy_module(gauntlet, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type gauntlet_t;
+type gauntlet_exec_t;
+init_daemon_domain(gauntlet_t, gauntlet_exec_t)
+
+permissive gauntlet_t;
+
+type gauntlet_initrc_exec_t;
+init_script_file(gauntlet_initrc_exec_t)
+
+type gauntlet_conf_t;
+files_type(gauntlet_conf_t)
+
+type gauntlet_var_lib_t;
+files_type(gauntlet_var_lib_t)
+
+type gauntlet_var_run_t;
+files_type(gauntlet_var_run_t)
+
+type gauntlet_port_t;
+corenet_port(gauntlet_port_t)
+
+########################################
+#
+# gauntlet local policy
+#
+allow gauntlet_t self:process { fork };
+
+allow gauntlet_t self:fifo_file rw_fifo_file_perms;
+allow gauntlet_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(gauntlet_t, gauntlet_conf_t, gauntlet_conf_t)
+manage_files_pattern(gauntlet_t, gauntlet_conf_t, gauntlet_conf_t)
+
+manage_dirs_pattern(gauntlet_t, gauntlet_var_lib_t, gauntlet_var_lib_t)
+manage_files_pattern(gauntlet_t, gauntlet_var_lib_t, gauntlet_var_lib_t)
+files_var_lib_filetrans(gauntlet_t, gauntlet_var_lib_t, { dir file })
+
+manage_dirs_pattern(gauntlet_t, gauntlet_var_run_t, gauntlet_var_run_t)
+manage_files_pattern(gauntlet_t, gauntlet_var_run_t, gauntlet_var_run_t)
+
+sysnet_dns_name_resolve(gauntlet_t)
+corenet_all_recvfrom_unlabeled(gauntlet_t)
+
+allow gauntlet_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(gauntlet_t)
+corenet_tcp_sendrecv_generic_node(gauntlet_t)
+corenet_tcp_sendrecv_all_ports(gauntlet_t)
+corenet_tcp_bind_generic_node(gauntlet_t)
+
+gen_require(`
+    type gauntlet_port_t;
+')
+allow gauntlet_t gauntlet_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type gauntlet_port_t;
+')
+allow gauntlet_t gauntlet_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(gauntlet_t)
+
+files_read_etc_files(gauntlet_t)
+
+miscfiles_read_localization(gauntlet_t)
+
+sysnet_dns_name_resolve(gauntlet_t)
+
+allow gauntlet_t gauntlet_exec_t:file execute_no_trans;
+allow gauntlet_t self:process setsched;
+corecmd_exec_ls(gauntlet_t)
+corenet_tcp_connect_http_port(gauntlet_t)
+dev_read_urand(gauntlet_t)
+fs_getattr_xattr_fs(gauntlet_t)
+kernel_read_system_state(gauntlet_t)
